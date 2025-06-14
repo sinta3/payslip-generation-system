@@ -120,7 +120,7 @@ Create a `.env` file in the project root based on env example
 ## Seeders
 
 Initial seed includes:
-- One employee
+- 100 employee
 - One admin user
 
 Used for testing login, attendance, and payroll processing.
@@ -179,12 +179,6 @@ All routes are auto-loaded through `src/routes/index.js`
 
 Centralized via `middleware/error-handler.js`
 - Catches async errors
-- Returns consistent JSON shape:
-```json
-{
-  "statusCode": 400,
-  "message": "Validation failed"
-}
 ```
 
 Logging via `shared/logger.js`.
