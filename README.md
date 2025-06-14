@@ -178,8 +178,7 @@ All routes are auto-loaded through `src/routes/index.js`
 ## Error Handling
 
 Centralized via `middleware/error-handler.js`
-- Catches async errors
-```
+- Catches async error
 
 Logging via `shared/logger.js`.
 
