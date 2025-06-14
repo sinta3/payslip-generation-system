@@ -1,0 +1,11 @@
+const express = require("express");
+const router = express.Router();
+const {
+  validateTokenEmployee,
+} = require("../../middleware/token-validation-handler");
+const { auditLogMiddleware } = require("../../middleware/audit-log-handler");
+const { submitAttendance } = require("./attendance.controller");
+
+router.post("/", validateTokenEmployee, auditLogMiddleware, submitAttendance);
+
+module.exports = router;
