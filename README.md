@@ -1,7 +1,7 @@
 
 # Payslip Generation System
 
-A modular backend API system for generating employee payslips. Built with **Node.js**, **Express**, **Sequelize**, and **PostgreSQL**, it handles core HR functions like attendance tracking, overtime, reimbursements, and monthly payroll processing.
+A feature based modular backend API system for generating employee payslips. Built with **Node.js**, **Express**, **Sequelize**, and **PostgreSQL**, it handles core HR functions like attendance tracking, overtime, reimbursements, and monthly payroll processing.
 
 This project was developed to fulfill the requirements of a case study for implementing a company-wide payroll system with monthly salary calculations, proration based on attendance, and overtime handling.
 
@@ -183,10 +183,5 @@ Centralized via `middleware/error-handler.js`
 Logging via `shared/logger.js`.
 
 ---
-
----
-
-> Built for backend payroll automation case study using feature-based modular architecture.
-
 ## Documentation
 import from folder postman
