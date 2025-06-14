@@ -18,7 +18,7 @@ This project was developed to fulfill the requirements of a case study for imple
 7. [Core Features](#core-features)
 8. [API Modules](#api-modules)
 9. [Error Handling](#error-handling)
-
+10. [Documentation](#documentation)
 ---
 
 ## Project Overview
@@ -194,3 +194,6 @@ Logging via `shared/logger.js`.
 ---
 
 > Built for backend payroll automation case study using feature-based modular architecture.
+
+## Documentation
+import from folder postman

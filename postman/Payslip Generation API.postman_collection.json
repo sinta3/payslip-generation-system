@@ -1,0 +1,1303 @@
+{
+	"info": {
+		"_postman_id": "4c8e6531-12ea-417c-853b-5581dc43bdde",
+		"name": "Payslip Generation API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11282818",
+		"_collection_link": "https://warped-spaceship-969217.postman.co/workspace/Payroll-Generation-System~b8c4d57f-8b4f-4694-a9df-869e1a914d2b/collection/11282818-4c8e6531-12ea-417c-853b-5581dc43bdde?action=share&source=collection_link&creator=11282818"
+	},
+	"item": [
+		{
+			"name": "Employee",
+			"item": [
+				{
+					"name": "Login Employee",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"// Check for status code\r",
+									"pm.expect(pm.response.code).to.eql(200);\r",
+									"\r",
+									"// Validate response time\r",
+									"pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"\r",
+									"// Check response content-type\r",
+									"pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+									"\r",
+									"// Validate response body structure\r",
+									"pm.expect(response).to.have.all.keys('message', 'loginData');\r",
+									"pm.expect(response.message).to.eql('Login success');\r",
+									"\r",
+									"// Validate loginData structure\r",
+									"pm.expect(response.loginData).to.have.all.keys('accessToken', 'employeeId', 'fullName', 'username', 'role');\r",
+									"\r",
+									"// Validate types of loginData fields\r",
+									"pm.expect(response.loginData.accessToken).to.be.a('string');\r",
+									"pm.expect(response.loginData.employeeId).to.be.a('number');\r",
+									"pm.expect(response.loginData.fullName).to.be.a('string');\r",
+									"pm.expect(response.loginData.username).to.be.a('string');\r",
+									"pm.expect(response.loginData.role).to.be.a('string');\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\":\"OXAIeaotDcfKz8J\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/employee/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"employee",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success: 200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"admin\",\n    \"password\":\"ZpnYCqPhYIlhUhg\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/employee/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"employee",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "316"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"13c-dWOeKtFI/jO7a4wnoGnoeFeQNak\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 14 Jun 2025 11:06:06 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Login success\",\n    \"loginData\": {\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ5ODk5MTY2LCJleHAiOjE3NDk5MDk5NjZ9.5-kZOUglBB6Kb1W3U9044z4N1x326dYt3xRVuP2Y2Jc\",\n        \"employeeId\": 205,\n        \"fullName\": \"System Administrator\",\n        \"username\": \"admin\",\n        \"role\": \"admin\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Attendance",
+			"item": [
+				{
+					"name": "Submit Attendance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"// Test for status code\r",
+									"pm.test('Status code is 200', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Test for response time\r",
+									"pm.test('Response time is less than 200ms', () => {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"// Test for content type\r",
+									"pm.test('Content-Type is application/json', () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});\r",
+									"\r",
+									"// Test for message in response\r",
+									"pm.test('Response message is present', () => {\r",
+									"    pm.expect(response.message).to.exist;\r",
+									"    pm.expect(response.message).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"// Test for reimbursement object properties\r",
+									"const reimbursement = response.reimbursement;\r",
+									"\r",
+									"pm.test('Reimbursement object has required properties', () => {\r",
+									"    pm.expect(reimbursement).to.have.all.keys(\r",
+									"        'is_locked',\r",
+									"        'reimbursement_id',\r",
+									"        'employee_id',\r",
+									"        'date',\r",
+									"        'request_id',\r",
+									"        'total_reimbursement',\r",
+									"        'description',\r",
+									"        'created_by',\r",
+									"        'updated_by',\r",
+									"        'updated_at',\r",
+									"        'created_at',\r",
+									"        'employee_payroll_id'\r",
+									"    );\r",
+									"});\r",
+									"\r",
+									"// Test for reimbursement_id to be a number\r",
+									"pm.test('Reimbursement ID is a number', () => {\r",
+									"    pm.expect(reimbursement.reimbursement_id).to.be.a('number');\r",
+									"});\r",
+									"\r",
+									"// Test for total_reimbursement to be a number\r",
+									"pm.test('Total reimbursement is a number', () => {\r",
+									"    pm.expect(reimbursement.total_reimbursement).to.be.a('number');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attendance_type\": \"checkout\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/attendance/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"attendance",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success Checkin: 200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"attendance_type\": \"checkin\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/attendance/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"attendance",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "395"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"18b-ZNp7ldPMZ/BeW0PXgkZlTD0X+IQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 14 Jun 2025 13:19:24 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Submit attendance success\",\n    \"attendance\": [\n        {\n            \"is_locked\": false,\n            \"attendance_id\": 2,\n            \"employee_id\": 2,\n            \"date\": \"2025-06-14T00:00:00.000Z\",\n            \"request_id\": \"6e22901f-9c62-4ece-be9c-9fd22e563a0d\",\n            \"created_by\": 2,\n            \"updated_by\": 2,\n            \"checkin_at\": \"2025-06-14T13:19:24.407Z\",\n            \"checkout_at\": null,\n            \"employee_payroll_id\": null,\n            \"created_at\": \"2025-06-14T13:19:24.416Z\",\n            \"updated_at\": \"2025-06-14T13:19:24.416Z\"\n        },\n        null\n    ]\n}"
+						},
+						{
+							"name": "Success Checkout: 200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"attendance_type\": \"checkout\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/attendance/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"attendance",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "417"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1a1-xzxco4ym20mSgitOGmjrzgxHtgo\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 14 Jun 2025 13:19:52 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Submit attendance success\",\n    \"attendance\": [\n        {\n            \"is_locked\": false,\n            \"attendance_id\": 2,\n            \"employee_id\": 2,\n            \"date\": \"2025-06-14T00:00:00.000Z\",\n            \"request_id\": \"1f028290-7477-497f-9838-a9d14f9c4c0b\",\n            \"created_by\": 2,\n            \"updated_by\": 2,\n            \"checkout_at\": \"2025-06-14T13:19:52.297Z\",\n            \"checkin_at\": \"2025-06-14T13:19:24.407Z\",\n            \"employee_payroll_id\": null,\n            \"created_at\": \"2025-06-14T13:19:24.416Z\",\n            \"updated_at\": \"2025-06-14T13:19:52.302Z\"\n        },\n        null\n    ]\n}"
+						},
+						{
+							"name": "Failed: 400",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"attendance_type\": \"checkout\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/attendance/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"attendance",
+										""
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "55"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"37-kHPYw0Mq0+9JW0eDK5cgARFBmkg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 14 Jun 2025 13:22:18 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Employee already submit attendance today!\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Payroll",
+			"item": [
+				{
+					"name": "Submit Process Payroll",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Unit tests for payroll process response\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"// Test for successful response status\r",
+									"pm.expect(pm.response.code).to.eql(200);\r",
+									"\r",
+									"// Test for response content type\r",
+									"pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+									"\r",
+									"// Test for message in response\r",
+									"pm.expect(response.message).to.exist;\r",
+									"pm.expect(response.message).to.be.a('string');\r",
+									"pm.expect(response.message).to.equal('Submit process payroll period success');\r",
+									"\r",
+									"// Test for payslip array\r",
+									"pm.expect(response.payslip).to.exist;\r",
+									"pm.expect(response.payslip).to.be.an('array');\r",
+									"\r",
+									"// Loop through each payslip and validate properties\r",
+									"response.payslip.forEach(payslip => {\r",
+									"    pm.expect(payslip).to.have.all.keys(\r",
+									"        'payroll_id',\r",
+									"        'employee_id',\r",
+									"        'total_salary',\r",
+									"        'total_overtime_salary',\r",
+									"        'total_reimbursement_salary',\r",
+									"        'total_reguler_salary',\r",
+									"        'hourly_salary',\r",
+									"        'total_attendance_day',\r",
+									"        'total_overtime_hours',\r",
+									"        'total_reimbursement_request',\r",
+									"        'request_id',\r",
+									"        'created_by',\r",
+									"        'is_locked'\r",
+									"    );\r",
+									"\r",
+									"    // Validate types of properties\r",
+									"    pm.expect(payslip.payroll_id).to.be.a('number');\r",
+									"    pm.expect(payslip.employee_id).to.be.a('number');\r",
+									"    pm.expect(payslip.total_salary).to.be.a('number');\r",
+									"    pm.expect(payslip.total_overtime_salary).to.be.a('number');\r",
+									"    pm.expect(payslip.total_reimbursement_salary).to.be.a('number');\r",
+									"    pm.expect(payslip.total_reguler_salary).to.be.a('number');\r",
+									"    pm.expect(payslip.hourly_salary).to.be.a('number');\r",
+									"    pm.expect(payslip.total_attendance_day).to.be.a('number');\r",
+									"    pm.expect(payslip.total_overtime_hours).to.be.a('number');\r",
+									"    pm.expect(payslip.total_reimbursement_request).to.be.a('number');\r",
+									"    pm.expect(payslip.request_id).to.be.a('string');\r",
+									"    pm.expect(payslip.created_by).to.be.a('number');\r",
+									"    pm.expect(payslip.is_locked).to.be.a('boolean');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessTokenAdmin}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"payroll_period_month\": \"06\",\n    \"payroll_period_year\":\"2025\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/payroll/process",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"payroll",
+								"process"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success: 200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessTokenAdmin}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"payroll_period_month\": \"06\",\n    \"payroll_period_year\":\"2025\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/payroll/process",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"payroll",
+										"process"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "32157"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"7d9d-YtXjGoGSuD9yT0l9LLfCiuvSwdo\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 14 Jun 2025 16:33:18 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Submit process payroll period success\",\n    \"payslip\": [\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 2,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 63594,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 3,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 67616,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 4,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 53604,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 5,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 78299,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 6,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 60644,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 7,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 83760,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 8,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 29909,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 9,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 52530,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 10,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 64742,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 11,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 82167,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 12,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 44479,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 13,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 93465,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 14,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 41282,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 15,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 89229,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 16,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 42738,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 17,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 95879,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 18,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 91386,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 19,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 74724,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 20,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 34629,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 21,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 37997,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 22,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 88663,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 23,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 51006,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 24,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 77118,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 25,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 76669,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 26,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 82167,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 27,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 45703,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 28,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 37113,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 29,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 83727,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 30,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 65159,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 31,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 85412,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 32,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 41928,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 33,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 41970,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 34,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 78255,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 35,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 71506,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 36,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 52405,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 37,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 38309,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 38,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 37116,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 39,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 70808,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 40,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 64126,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 41,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 33743,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 42,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 43539,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 43,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 90730,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 44,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 36018,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 45,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 45189,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 46,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 88721,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 47,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 50184,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 48,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 72661,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 49,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 44442,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 50,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 33334,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 51,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 51336,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 52,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 86555,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 53,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 80803,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 54,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 73021,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 55,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 69129,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 56,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 87776,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 57,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 90198,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 58,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 50209,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 59,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 30410,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 60,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 84012,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 61,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 90170,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 62,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 65018,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 63,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 41094,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 64,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 48012,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 65,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 86707,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 66,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 69105,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 67,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 64067,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 68,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 62055,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 69,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 59854,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 70,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 70319,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 71,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 34787,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 72,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 68866,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 73,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 86445,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 74,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 38735,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 75,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 78039,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 76,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 55242,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 77,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 61031,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 78,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 43877,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 79,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 38267,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 80,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 63985,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 81,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 70157,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 82,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 53443,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 83,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 86511,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 84,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 29679,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 85,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 45071,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 86,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 46394,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 87,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 72003,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 88,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 36152,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 89,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 39805,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 90,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 57481,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 91,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 71332,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 92,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 87048,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 93,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 81699,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 94,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 55364,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 95,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 71928,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 96,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 56141,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 97,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 72608,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 98,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 79404,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 99,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 90544,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 100,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 90306,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        },\n        {\n            \"payroll_id\": 1,\n            \"employee_id\": 101,\n            \"total_salary\": 0,\n            \"total_overtime_salary\": 0,\n            \"total_reimbursement_salary\": 0,\n            \"total_reguler_salary\": 0,\n            \"hourly_salary\": 48900,\n            \"total_attendance_day\": 0,\n            \"total_overtime_hours\": 0,\n            \"total_reimbursement_request\": 0,\n            \"request_id\": \"29a0d787-e69f-4c7f-a35d-c99b8a4a2dbe\",\n            \"created_by\": 1,\n            \"is_locked\": true\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Employee Payslip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Assert the response status code\r",
+									"pm.response.to.have.status(200);\r",
+									"\r",
+									"// Assert the response time is less than 200ms\r",
+									"pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"\r",
+									"// Parse the JSON response\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"// Assert the response structure\r",
+									"pm.expect(response).to.have.property('message');\r",
+									"pm.expect(response.message).to.be.a('string');\r",
+									"pm.expect(response).to.have.property('payroll');\r",
+									"pm.expect(response.payroll).to.be.an('object');\r",
+									"\r",
+									"// Assert payroll properties\r",
+									"const payroll = response.payroll;\r",
+									"pm.expect(payroll).to.have.property('payroll_id').that.is.a('number');\r",
+									"pm.expect(payroll).to.have.property('employee_id').that.is.a('number');\r",
+									"pm.expect(payroll).to.have.property('total_salary').that.is.a('number');\r",
+									"pm.expect(payroll).to.have.property('total_overtime_salary').that.is.a('number');\r",
+									"pm.expect(payroll).to.have.property('total_reimbursement_salary').that.is.a('number');\r",
+									"pm.expect(payroll).to.have.property('total_reguler_salary').that.is.a('number');\r",
+									"pm.expect(payroll).to.have.property('hourly_salary').that.is.a('number');\r",
+									"pm.expect(payroll).to.have.property('total_attendance_day').that.is.a('number');\r",
+									"pm.expect(payroll).to.have.property('total_overtime_hours').that.is.a('number');\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"payroll_period_month\": \"06\",\n    \"payroll_period_year\":\"2025\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/payroll/payslip/employee?payroll_period_month=06&payroll_period_year=2025",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"payroll",
+								"payslip",
+								"employee"
+							],
+							"query": [
+								{
+									"key": "payroll_period_month",
+									"value": "06"
+								},
+								{
+									"key": "payroll_period_year",
+									"value": "2025"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success: 200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"payroll_period_month\": \"06\",\n    \"payroll_period_year\":\"2025\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/payroll/payslip/employee?payroll_period_month=06&payroll_period_year=2025",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"payroll",
+										"payslip",
+										"employee"
+									],
+									"query": [
+										{
+											"key": "payroll_period_month",
+											"value": "06"
+										},
+										{
+											"key": "payroll_period_year",
+											"value": "2025"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "269"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"10d-fl0FGuRiLu/ae/xAzcBEJJW7nPM\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 14 Jun 2025 16:37:54 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Get employee payslip success\",\n    \"payroll\": {\n        \"payroll_id\": 1,\n        \"employee_id\": 2,\n        \"total_salary\": 5596272,\n        \"total_overtime_salary\": 0,\n        \"total_reimbursement_salary\": 0,\n        \"total_reguler_salary\": 5596272,\n        \"hourly_salary\": 63594,\n        \"total_attendance_day\": 11,\n        \"total_overtime_hours\": 0\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Summary Payslip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"// Test for status code\r",
+									"pm.expect(pm.response.code).to.equal(200);\r",
+									"\r",
+									"// Test for response time\r",
+									"pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"\r",
+									"// Test for response content type\r",
+									"pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"\r",
+									"// Test for presence of message in the response\r",
+									"pm.expect(response).to.have.property('message');\r",
+									"\r",
+									"// Test for payroll structure\r",
+									"pm.expect(response).to.have.property('payroll');\r",
+									"pm.expect(response.payroll).to.be.an('object');\r",
+									"\r",
+									"// Test for total_salary_employees in payroll\r",
+									"pm.expect(response.payroll).to.have.property('total_salary_employees');\r",
+									"pm.expect(response.payroll.total_salary_employees).to.be.a('number');\r",
+									"\r",
+									"// Test for employee_salary array in payroll\r",
+									"pm.expect(response.payroll).to.have.property('employee_salary');\r",
+									"pm.expect(response.payroll.employee_salary).to.be.an('array');\r",
+									"\r",
+									"// Test for each employee in employee_salary array\r",
+									"response.payroll.employee_salary.forEach(employee => {\r",
+									"    pm.expect(employee).to.have.property('employee_id');\r",
+									"    pm.expect(employee.employee_id).to.be.a('number');\r",
+									"    pm.expect(employee).to.have.property('total_salary');\r",
+									"    pm.expect(employee.total_salary).to.be.a('number');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessTokenAdmin}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"payroll_period_month\": \"06\",\n    \"payroll_period_year\":\"2025\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/payroll/payslip/summary?payroll_period_month=06&payroll_period_year=2025",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"payroll",
+								"payslip",
+								"summary"
+							],
+							"query": [
+								{
+									"key": "payroll_period_month",
+									"value": "06"
+								},
+								{
+									"key": "payroll_period_year",
+									"value": "2025"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success: 200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessTokenAdmin}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"payroll_period_month\": \"06\",\n    \"payroll_period_year\":\"2025\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/payroll/payslip/summary?payroll_period_month=06&payroll_period_year=2025",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"payroll",
+										"payslip",
+										"summary"
+									],
+									"query": [
+										{
+											"key": "payroll_period_month",
+											"value": "06"
+										},
+										{
+											"key": "payroll_period_year",
+											"value": "2025"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "7359"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1cbf-Rt4jbv5WCe51XUAkZmXabG+hyjg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 14 Jun 2025 16:48:50 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Get summary employee payroll period success\",\n    \"payroll\": {\n        \"total_salary_employees\": 9016608,\n        \"employee_salary\": [\n            {\n                \"employee_id\": 2,\n                \"total_salary\": 5596272\n            },\n            {\n                \"employee_id\": 3,\n                \"total_salary\": 3420336\n            },\n            {\n                \"employee_id\": 4,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 5,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 6,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 7,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 8,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 9,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 10,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 11,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 12,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 13,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 14,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 15,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 16,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 17,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 18,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 19,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 20,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 21,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 22,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 23,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 24,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 25,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 26,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 27,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 28,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 29,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 30,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 31,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 32,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 33,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 34,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 35,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 36,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 37,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 38,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 39,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 40,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 41,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 42,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 43,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 44,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 45,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 46,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 47,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 48,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 49,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 50,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 51,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 52,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 53,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 54,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 55,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 56,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 57,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 58,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 59,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 60,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 61,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 62,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 63,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 64,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 65,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 66,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 67,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 68,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 69,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 70,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 71,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 72,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 73,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 74,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 75,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 76,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 77,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 78,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 79,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 80,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 81,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 82,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 83,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 84,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 85,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 86,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 87,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 88,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 89,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 90,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 91,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 92,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 93,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 94,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 95,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 96,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 97,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 98,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 99,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 100,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 101,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 101,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 2,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 3,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 4,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 5,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 6,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 7,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 8,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 9,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 10,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 11,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 12,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 13,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 14,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 15,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 16,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 17,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 18,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 19,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 20,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 21,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 22,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 23,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 24,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 25,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 26,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 27,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 28,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 29,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 30,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 31,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 32,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 33,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 34,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 35,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 36,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 37,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 38,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 39,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 40,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 41,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 42,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 43,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 44,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 45,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 46,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 47,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 48,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 49,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 50,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 51,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 52,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 53,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 54,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 55,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 56,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 57,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 58,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 59,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 60,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 61,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 62,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 63,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 64,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 65,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 66,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 67,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 68,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 69,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 70,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 71,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 72,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 73,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 74,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 75,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 76,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 77,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 78,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 79,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 80,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 81,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 82,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 83,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 84,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 85,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 86,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 87,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 88,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 89,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 90,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 91,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 92,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 93,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 94,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 95,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 96,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 97,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 98,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 99,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 100,\n                \"total_salary\": 0\n            },\n            {\n                \"employee_id\": 101,\n                \"total_salary\": 0\n            }\n        ]\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Overtime",
+			"item": [
+				{
+					"name": "Submit Overtime",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"// Test for status code\r",
+									"pm.expect(pm.response.code).to.equal(400);\r",
+									"\r",
+									"// Test for content type\r",
+									"pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"\r",
+									"// Test for response message\r",
+									"pm.expect(response.message).to.exist;\r",
+									"pm.expect(response.message).to.be.a('string');\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"date\": \"2025-06-13\",\n    \"overtime_hours\":3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/overtime/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"overtime",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Failed: 400",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"date\": \"2025-06-14\",\n    \"overtime_hours\":\"4\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/overtime/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"overtime",
+										""
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "103"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"67-SkFEQNMjg+KHfsAYit4ou8q1GOo\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 14 Jun 2025 13:50:55 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Overtime date must be in the past. You cannot submit overtime for today or a future date.\"\n}"
+						},
+						{
+							"name": "Success: 200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"date\": \"2025-06-13\",\n    \"overtime_hours\":\"3\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/overtime/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"overtime",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "328"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"148-Pilz81OY2woAKHRCnabBnWVWpRk\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 14 Jun 2025 13:52:33 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Submit overtime success\",\n    \"overtime\": {\n        \"is_locked\": false,\n        \"overtime_id\": 2,\n        \"employee_id\": 2,\n        \"date\": \"2025-06-13\",\n        \"request_id\": \"c31c654c-6dff-4db8-9b0a-3f4096591f63\",\n        \"overtime_hours\": 3,\n        \"created_by\": 2,\n        \"updated_by\": 2,\n        \"updated_at\": \"2025-06-14T13:52:33.308Z\",\n        \"created_at\": \"2025-06-14T13:52:33.308Z\",\n        \"employee_payroll_id\": null\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Reimbursement",
+			"item": [
+				{
+					"name": "Submit Reimbursement",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"// Test for successful submission message\r",
+									"pm.expect(response.message).to.exist;\r",
+									"pm.expect(response.message).to.equal(\"Submit reimbursement success\");\r",
+									"\r",
+									"// Test for reimbursement object structure\r",
+									"pm.expect(response.reimbursement).to.exist;\r",
+									"pm.expect(response.reimbursement).to.be.an(\"object\");\r",
+									"\r",
+									"// Test reimbursement object properties\r",
+									"const reimbursementKeys = [\r",
+									"    \"is_locked\",\r",
+									"    \"reimbursement_id\",\r",
+									"    \"employee_id\",\r",
+									"    \"date\",\r",
+									"    \"request_id\",\r",
+									"    \"total_reimbursement\",\r",
+									"    \"description\",\r",
+									"    \"created_by\",\r",
+									"    \"updated_by\",\r",
+									"    \"updated_at\",\r",
+									"    \"created_at\",\r",
+									"    \"employee_payroll_id\"\r",
+									"];\r",
+									"\r",
+									"reimbursementKeys.forEach(key => {\r",
+									"    pm.expect(response.reimbursement).to.have.property(key);\r",
+									"});\r",
+									"\r",
+									"// Test data types for reimbursement properties\r",
+									"pm.expect(response.reimbursement.is_locked).to.be.a(\"boolean\");\r",
+									"pm.expect(response.reimbursement.reimbursement_id).to.be.a(\"number\");\r",
+									"pm.expect(response.reimbursement.employee_id).to.be.a(\"number\");\r",
+									"pm.expect(response.reimbursement.date).to.be.a(\"string\");\r",
+									"pm.expect(response.reimbursement.request_id).to.be.a(\"string\");\r",
+									"pm.expect(response.reimbursement.total_reimbursement).to.be.a(\"number\");\r",
+									"pm.expect(response.reimbursement.description).to.be.a(\"string\");\r",
+									"pm.expect(response.reimbursement.created_by).to.be.a(\"number\");\r",
+									"pm.expect(response.reimbursement.updated_by).to.be.a(\"number\");\r",
+									"pm.expect(response.reimbursement.updated_at).to.be.a(\"string\");\r",
+									"pm.expect(response.reimbursement.created_at).to.be.a(\"string\");\r",
+									"pm.expect(response.reimbursement.employee_payroll_id).to.satisfy(value => value === null || typeof value === \"number\");\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"total_reimbursement\":10000,\n    \"description\":\"Untuk fotocopy\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/reimbursement/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"reimbursement",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success: 200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"total_reimbursement\":150000,\n    \"description\":\"Untuk kebutuhan perjalanan dinas\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/reimbursement/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"reimbursement",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "402"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"192-91riNBj5fl/CDaK2Itj12T+QcBs\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 14 Jun 2025 13:54:03 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Submit reimbursement success\",\n    \"reimbursement\": {\n        \"is_locked\": false,\n        \"reimbursement_id\": 1,\n        \"employee_id\": 2,\n        \"date\": \"2025-06-14\",\n        \"request_id\": \"c132e15a-52b8-4fcc-bd14-5c991b627fde\",\n        \"total_reimbursement\": 150000,\n        \"description\": \"Untuk kebutuhan perjalanan dinas\",\n        \"created_by\": 2,\n        \"updated_by\": 2,\n        \"updated_at\": \"2025-06-14T13:54:03.809Z\",\n        \"created_at\": \"2025-06-14T13:54:03.809Z\",\n        \"employee_payroll_id\": null\n    }\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}
